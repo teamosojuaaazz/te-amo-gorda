@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Para So 💖</title>
+  <meta name="description" content="Un regalo virtual hecho con amor" />
+  <style>
+    :root{
+      --bg: #0f0f13;
+      --card: #17171d;
+      --text: #f8f8fb;
+      --muted: #b9b9c5;
+      --accent: #ff4d8d; /* color principal (rosa)
+      Puedes cambiarlo por ejemplo a #7c3aed (violeta) o #00d2d3 (turquesa) */
+      --accent-2: #ffd1e3;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+      --radius-xl: 1.5rem;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:radial-gradient(1200px 800px at 80% -10%,rgba(255,77,141,.12),transparent 60%),radial-gradient(900px 600px at 10% 110%,rgba(255,77,141,.10),transparent 60%),var(--bg);color:var(--text);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";}
+    a{color:inherit}
+    .container{max-width:980px;margin:0 auto;padding:24px}
+    .hero{display:grid;place-items:center;min-height:88vh;text-align:center;position:relative;overflow:hidden}
+    .hero h1{font-size:clamp(2rem, 6vw, 4rem);line-height:1.1;margin:.2em 0;background: linear-gradient(90deg,var(--accent),#ffa6c8,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{color:var(--muted);font-size:clamp(1rem,2.3vw,1.2rem)}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;border:none;cursor:pointer;padding:14px 20px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;box-shadow:0 8px 30px rgba(255,77,141,.35);transition:.25s transform, .25s filter}
+    .btn:active{transform:translateY(2px)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.1);color:var(--text)}
+    .stack{display:grid;gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);backdrop-filter: blur(8px);-webkit-backdrop-filter: blur(8px);border-radius:var(--radius-xl);box-shadow:var(--shadow);}
+    .card .inner{padding:22px}
+    .flex{display:flex;gap:16px;flex-wrap:wrap}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:780px){.grid.cols-3{grid-template-columns:1fr}}
+
+    /* Typewriter */
+    .typewriter{display:inline-block;border-right:2px solid var(--accent);white-space:nowrap;overflow:hidden}
+
+    /* Floating hearts */
+    .heart{position:absolute;opacity:.9;user-select:none;pointer-events:none}
+
+    /* Sections */
+    section{scroll-margin-top:80px}
+    .section-title{font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+    /* Gallery */
+    .carousel{display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;padding: 6px}
+    .carousel img, .carousel .ph{flex:0 0 auto;scroll-snap-align:center;border-radius:20px;max-height:280px;aspect-ratio:4/3;object-fit:cover;border:1px solid rgba(255,255,255,.08)}
+    .carousel::-webkit-scrollbar{height:10px}
+    .carousel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+
+    /* Love letter flip */
+    .flip{perspective:1200px}
+    .flip-inner{position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+    .flip.flipped .flip-inner{transform:rotateY(180deg)}
+    .flip-face{position:relative;min-height:220px}
+    .flip-front,.flip-back{position:absolute;inset:0;border-radius:inherit;padding:22px;backface-visibility:hidden}
+    .flip-back{transform:rotateY(180deg)}
+
+    /* Coupons */
+    .coupon{position:relative;padding:18px;border:1px dashed rgba(255,255,255,.35);border-radius:18px}
+    .coupon.redeemed{opacity:.55;filter:saturate(.6)}
+    .coupon .tag{position:absolute;right:12px;top:12px;font-size:.8rem;color:var(--muted)}
+
+    /* Countdown */
+    .countdown{display:grid;grid-auto-flow:column;gap:14px;justify-content:center}
+    .timebox{padding:16px 18px;border-radius:16px;background:#121217;border:1px solid rgba(255,255,255,.08);min-width:86px}
+    .timebox strong{font-size:1.6rem;display:block}
+
+    /* Secret message */
+    .secret{filter: blur(8px);transition: .4s filter}
+    .secret.revealed{filter: blur(0)}
+
+    /* Footer */
+    footer{padding:40px 0;color:var(--muted);text-align:center}
+
+    /* Tiny helpers */
+    .center{display:grid;place-items:center}
+    .mt-2{margin-top:8px}.mt-3{margin-top:14px}.mt-4{margin-top:20px}.mt-6{margin-top:28px}.mt-8{margin-top:36px}
+    /* --- FIX definitivo: la carta vuelve a aparecer --- */
+#letter{
+  position: relative;
+  min-height: clamp(260px, 34vw, 420px); /* altura del card */
+  overflow: visible;                     /* que no recorte el 3D */
+}
+#letter .flip-inner{ min-height: inherit; }
+
+/* Las caras siguen absolutas, ocupando todo el card */
+#letter .flip-front,
+#letter .flip-back{ position: absolute; inset: 0; }
+
+/* Anulamos cualquier min-height previo en .flip-face
+   para que no interfiera con lo de arriba */
+.flip-face{ min-height: 0 !important; }
+
+  </style>
+</head>
+<body>
+  <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:0"></canvas>
+  <div class="container">
+    <header class="hero card" style="z-index:1">
+      <div class="inner">
+        <p class="section-title">Regalo virtual</p>
+        <h1 id="heroTitle">Para So, <span class="typewriter" id="tw"></span> ✨</h1>
+        <p>Hecho con todo mi amor. Abrí este regalo cuando estés lista 💌</p>
+        <div class="mt-4 flex center">
+          <button class="btn" id="openGift">💖 Abrir regalo</button>
+          <button class="btn ghost" id="toggleMusic">▶︎ Música</button>
+        </div>
+      </div>
+      <!-- floating hearts container -->
+      <div id="floatHearts"></div>
+    </header>
+
+    <main id="content" style="opacity:0; transform: translateY(20px); transition: .6s opacity, .6s transform;">
+
+      <!-- Love letter flip card -->
+      <section class="mt-8">
+        <div class="section-title">Carta</div>
+        <div class="card flip mt-3" id="letter">
+          <div class="flip-inner">
+            <div class="flip-front flip-face">
+              <div class="inner">
+                <h2>💌 Carta para So</h2>
+                <p>Hacé click para abrir la carta…</p>
+        
+              </div>
+            </div>
+            <div class="flip-back flip-face">
+              <div class="inner">
+                <h2>Lo que siento</h2>
+                <p id="letterText">Para mi pareja ideal. Esta carta la hago pensando en vos y en nosotros, porque es increíble lo mucho que avanzamos y lo rápido que nos adaptamos a los cambios <strong>JUNTOS</strong>. Recalco el <em>juntos</em> porque estoy seguro de que sin vos no podría adaptarme a nada. Y pensándolo bien, no debería preocuparme por eso, porque literalmente quiero pasar todo el resto de mi vida adaptándome a situaciones nuevas a tu lado — eso es lo que lo hace especial y único: <strong>que es junto a vos</strong>.
+<br><br>
+Te pido perdón por todas las peleas o malentendidos; siempre intento arreglar las cosas y no empeorarlas. Te amo demasiado como para querer discutir con vos, aunque me encanta hacerte enojar jeje. El dinero es solo una herramienta que uso para darte amor, y nunca voy a dudar en gastar hasta el último centavo que tenga en hacerte feliz (no me voy a arrepentir de nada de lo que haga por vos — excepto por mi micrófono xd).
+<br><br>
+No quiero ni imaginar lo que voy a sentir cuando cumplamos un año, ni tampoco dónde estaremos en ese momento, pero sé que si es a tu lado va a ser el lugar perfecto. Te amo muchísimo, mi amor; me hacés feliz cada día que paso con vos, y cada vez que me decís "te amo" lo tomo como si fuera el último. Feliz mes, mi amor. — Thi
+<br><br>
+<span id="yourName"></span></p>
+             
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gallery carousel -->
+      <section class="mt-8">
+        <div class="section-title">Momentos</div>
+        <div class="card mt-3">
+          <div class="inner">
+            <div class="carousel" id="gallery"></div>
+            <p class="mt-3" style="color:var(--muted)">Deslizá para ver más.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Countdown -->
+      <section class="mt-8">
+        <div class="section-title">Cuenta regresiva</div>
+        <div class="card mt-3">
+          <div class="inner center">
+            <h3>Falta para nuestro aniversario 🗓️</h3>
+            <div class="countdown mt-3" id="countdown"></div>
+            <p class="mt-2" style="color:var(--muted)">Objetivo: <span id="targetDate"></span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coupons -->
+      <section class="mt-8">
+        <div class="section-title">Cupones de amor</div>
+        <div class="grid cols-3 mt-3" id="coupons"></div>
+      </section>
+
+      <!-- Secret message -->
+      <section class="mt-8">
+        <div class="section-title">Mensaje secreto</div>
+        <div class="card mt-3">
+          <div class="inner">
+            <p class="secret" id="secretMsg">🌙 Si estás leyendo esto, significa que descubriste el secreto: sos mi persona favorita en todo el universo.</p>
+            <div class="mt-3 flex">
+              <input id="unlockInput" placeholder="Escribí la palabra mágica" style="flex:1;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#101017;color:var(--text)" />
+              <button class="btn" id="unlockBtn">🔓 Desbloquear</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="mt-8">
+      Hecho con ❤️ por <span id="footerNames"></span> · 
+  </div>
+
+  <!-- Audio (colocá tu archivo .mp3 en el mismo directorio con el nombre indicado en CONFIG.song) -->
+  <audio id="bgm" loop></audio>
+
+  <script>
+    // ======== CONFIG: Cambiá todo lo que quieras acá ========
+    const CONFIG = {
+      herName: "Sofía",
+      yourName: "Thi",
+      typewriterPhrases: [
+        "Te amo Gordis 💕",
+        "Nuestra historia recién empieza ✨",
+        "Guapa",
+        "EXESIVAMENTE BONITA",
+
+      ],
+      accentColor: "#ff4d8d",
+      song: "cancion.mp3", // Si preferís que suene la canción de YouTube, usá el reproductor integrado abajo.
+      youtube: [
+        "https://www.youtube.com/watch?v=nHVdEWooBoQ",
+        "https://www.youtube.com/watch?v=c66imHOBacU"
+      ],
+      gallery: [
+  "./photo1.jpg",
+  "./photo2.jpg",
+  "./photo3.jpg",
+  "./photo4.jpg",
+  "./photo5.jpg",
+  "./photo6.jpg",
+  "./photo7.jpg"
+],
+
+      nextDate: "2025-10-31 00:00", // Primer aniversario: 31 octubre 2025
+      coupons: [
+        { title: "Masaje de 30 minutos", note: "Con musikita chill y cremis", id: "c1"},
+        { title: "Salida sorpresa", note: "Planificada por mi, solo trae las ganas", id: "c2"},
+        { title: "Chocotorta", note: "Solo en momento especiales", id: "c3"},
+        { title: "lo que quieras.", note: "Hago lo que haga falta, gastalo bien", id: "c4"},
+        { title: "$10.000 para gastar ", note: "Elegilo vos", id: "c5"},
+        { title: "Cena casera romántica", note: "Yo cocino, vos disfrutas", id: "c6"}
+      ],
+      secretWord: "cold", // palabra para desbloquear el mensaje
+      secretMessage: "Quiero casarme con vos algún día 🥹💍Sos lo mejor que me pasó, mi amor 💕"
+    };
+
+    // Aplicar color acento a CSS root
+    document.documentElement.style.setProperty('--accent', CONFIG.accentColor);
+
+    // ======== Typewriter ========
+    const tw = document.getElementById('tw');
+    let twIndex = 0, charIndex = 0, deleting = false;
+    function typeLoop(){
+      const phrase = CONFIG.typewriterPhrases[twIndex % CONFIG.typewriterPhrases.length];
+      if(!deleting){
+        charIndex++;
+        tw.textContent = phrase.slice(0,charIndex);
+        if(charIndex === phrase.length){
+          deleting = true; setTimeout(typeLoop,1200); return;
+        }
+        setTimeout(typeLoop, 65);
+      } else {
+        charIndex--; tw.textContent = phrase.slice(0,charIndex);
+        if(charIndex === 0){ deleting = false; twIndex++; setTimeout(typeLoop, 350); return; }
+        setTimeout(typeLoop, 35);
+      }
+    }
+
+    // ======== Gift open (reveal main content + confetti + hearts) ========
+    const openBtn = document.getElementById('openGift');
+    const content = document.getElementById('content');
+    openBtn.addEventListener('click', ()=>{
+      content.style.opacity = 1; content.style.transform = 'translateY(0)';
+      burstConfetti();
+      spawnHearts(18);
+    });
+
+    // ======== Music ========
+    const audio = document.getElementById('bgm');
+    audio.src = CONFIG.song;
+    audio.volume = 0.4;
+    const musicBtn = document.getElementById('toggleMusic');
+    let playing = false;
+    musicBtn.addEventListener('click', async ()=>{
+      try{ if(!playing){ await audio.play(); playing = true; musicBtn.textContent = '⏸︎ Pausar'; } else { audio.pause(); playing=false; musicBtn.textContent = '▶︎ Música'; } }
+      catch(e){ alert('Cargá un archivo de música llamado '+CONFIG.song+' en la misma carpeta.'); }
+    });
+
+    // ======== Hero title names ========
+    document.getElementById('heroTitle');
+    document.getElementById('yourName').textContent = CONFIG.yourName;
+    document.getElementById('footerNames').textContent = `${CONFIG.yourName} → ${CONFIG.herName}`;
+
+    // ======== Flip letter ========
+const letter = document.getElementById('letter');
+// Si dejaste el efecto flip, mantené este listener protegido
+if (letter) {
+  letter.addEventListener('click', () => letter.classList.toggle('flipped'));
+}
+
+// BOTÓN DE COPIAR: solo añadí el listener si el botón existe.
+// (Si ya lo eliminaste del HTML, esto NO rompe nada.)
+const copyBtn = document.getElementById('copyLetter');
+if (copyBtn) {
+  copyBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(document.getElementById('letterText').innerText);
+    e.target.textContent = '✔ Copiado';
+    setTimeout(() => (e.target.textContent = 'Copiar texto'), 1200);
+  });
+}
+
+
+    // ======== Gallery ========
+    const gal = document.getElementById('gallery');
+    if(CONFIG.gallery.length){
+      CONFIG.gallery.forEach(src=>{
+        const img = new Image();
+img.loading = 'lazy';
+img.src = src;
+img.alt = ''; // sin texto alternativo
+
+        img.onerror = ()=>{ const ph = document.createElement('div'); ph.className='ph center'; ph.style.width='360px'; ph.style.background='linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02))'; ph.innerHTML = '<div style="text-align:center;padding:14px">📷<br><small style="color:var(--muted)">Cada momento que pase con vos se queda grabado en mi mente</small></div>'; gal.appendChild(ph); };
+        gal.appendChild(img);
+      });
+    }
+
+    // ======== Countdown ========
+    const cd = document.getElementById('countdown');
+    const target = new Date(CONFIG.nextDate);
+    document.getElementById('targetDate').textContent = target.toLocaleString();
+    function updateCountdown(){
+      const now = new Date();
+      const diff = Math.max(0, target - now);
+      const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000);
+      cd.innerHTML = ''+
+      `<div class="timebox"><strong>${d}</strong><span>días</span></div>`+
+      `<div class="timebox"><strong>${h}</strong><span>horas</span></div>`+
+      `<div class="timebox"><strong>${m}</strong><span>min</span></div>`+
+      `<div class="timebox"><strong>${s}</strong><span>seg</span></div>`;
+    }
+    updateCountdown(); setInterval(updateCountdown, 1000);
+
+    // ======== Coupons with localStorage ========
+    const couponsEl = document.getElementById('coupons');
+    const KEY = 'love-coupons';
+    const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+    CONFIG.coupons.forEach(c=>{
+      const div = document.createElement('div');
+      div.className = 'coupon card';
+      if(saved[c.id]) div.classList.add('redeemed');
+      div.innerHTML = `<div class="inner"><strong>🎟️ ${c.title}</strong><div class="tag">${saved[c.id] ? 'Canjeado' : 'Disponible'}</div><p class="mt-2" style="color:var(--muted)">${c.note}</p><button class="btn mt-3">${saved[c.id] ? '✔️ Canjeado' : 'Canjear'}</button></div>`;
+      const btn = div.querySelector('button');
+      btn.addEventListener('click', ()=>{
+        const ok = confirm('¿Confirmás canjear este cupón?');
+        if(!ok) return;
+        saved[c.id] = true; localStorage.setItem(KEY, JSON.stringify(saved));
+        div.classList.add('redeemed');
+        div.querySelector('.tag').textContent='Canjeado';
+        btn.textContent = '✔️ Canjeado';
+      });
+      couponsEl.appendChild(div);
+    });
+
+    // ======== Secret message ========
+    const secret = document.getElementById('secretMsg');
+    const unlockInput = document.getElementById('unlockInput');
+    const unlockBtn = document.getElementById('unlockBtn');
+    secret.textContent = CONFIG.secretMessage; // load but blurred
+    unlockBtn.addEventListener('click', ()=>{
+      const val = (unlockInput.value||'').trim().toLowerCase();
+      if(val === CONFIG.secretWord.toLowerCase()){
+        secret.classList.add('revealed');
+      } else { alert('Palabra incorrecta 😅'); }
+    });
+
+    // ======== Floating hearts generator ========
+    const heartContainer = document.getElementById('floatHearts');
+    function spawnHearts(n=12){
+      for(let i=0;i<n;i++){
+        const e = document.createElement('div');
+        e.className = 'heart';
+        e.textContent = ['💖','💘','💝','💞','💕'][Math.floor(Math.random()*5)];
+        const size = 18 + Math.random()*28;
+        e.style.fontSize = size+'px';
+        e.style.left = (Math.random()*100)+'%';
+        e.style.bottom = '-10px';
+        heartContainer.appendChild(e);
+        const duration = 3000 + Math.random()*2500;
+        const x = (Math.random()*2-1)*80;
+        e.animate([
+          { transform:`translate(0,0)`, opacity:.95 },
+          { transform:`translate(${x}px,-120vh)`, opacity:0 }
+        ], { duration, easing:'cubic-bezier(.2,.8,.2,1)' }).onfinish = ()=> e.remove();
+      }
+    }
+
+    // ======== Confetti ========
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W,H; function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight } resize(); addEventListener('resize', resize);
+    let confetti = [];
+    function burstConfetti(){
+      confetti = Array.from({length:150}, (_,i)=>({
+        x: W/2 + (Math.random()*2-1)*80,
+        y: H/2 + (Math.random()*2-1)*20,
+        r: 3+Math.random()*4,
+        a: Math.random()*Math.PI*2,
+        v: 1+Math.random()*3,
+        c: i%2? CONFIG.accentColor : '#ffd1e3'
+      }));
+      let t=0; (function loop(){
+        ctx.clearRect(0,0,W,H);
+        confetti.forEach(p=>{
+          p.x += Math.cos(p.a)*p.v; p.y += Math.sin(p.a)*p.v + .8; p.a += .02; p.v *= .995;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.c; ctx.fill();
+        });
+        t++; if(t<160) requestAnimationFrame(loop);
+      })();
+    }
+
+    // ======== Init ========
+    document.getElementById('tw').textContent = '';
+    typeLoop();
+  </script>
+</body>
+</html>
