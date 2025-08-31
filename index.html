@@ -95,6 +95,32 @@
    para que no interfiera con lo de arriba */
 .flip-face{ min-height: 0 !important; }
 
+
+  /* ===== MOBILE UTILITIES ===== */
+/* Alto real de viewport (evita saltos por la barra del navegador) */
+function setVh(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVh(); addEventListener('resize', setVh);
+
+/* Mejor tap en botones/carrusel (evita “doble-tap zoom” molesto) */
+document.addEventListener('touchstart', ()=>{}, {passive:true});
+
+/* Evitar flips accidentales al “scrollear” el carrusel:
+   solo se permite el flip si el toque NO empezó dentro del carrusel */
+let touchedInCarousel = false;
+document.getElementById('gallery')?.addEventListener('touchstart', ()=>{ touchedInCarousel = true; }, {passive:true});
+document.getElementById('gallery')?.addEventListener('touchend', ()=>{ touchedInCarousel = false; }, {passive:true});
+/* Si usás el flip, protegé el listener existente: */
+const _letterEl = document.getElementById('letter');
+if (_letterEl){
+  _letterEl.addEventListener('click', (e)=>{
+    if (touchedInCarousel) return;            // no flip si venía del carrusel
+    _letterEl.classList.toggle('flipped');
+  });
+}
+
   </style>
 </head>
 <body>
@@ -419,5 +445,6 @@ img.alt = ''; // sin texto alternativo
   </script>
 </body>
 </html>
+
 
 
